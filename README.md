@@ -97,3 +97,8 @@ module "redis_cache" {
 }
 ``` 
 
+### Notes
+
+- When network_mode = "private", the module:
+  - Creates and links a Private DNS Zone privatelink.redis.cache.windows.net to the specified vnet_id
+  - Disables public network access on the Redis instance

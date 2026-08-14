@@ -1,16 +1,16 @@
 # Optional Private DNS (only if network_mode = "private")
 resource "azurerm_private_dns_zone" "redis" {
-  count               = var.network_mode == "private" ? 2 : 0
+  count               = var.network_mode == "private" ? 1 : 0
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = var.resource_group_name
   tags                = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "redis" {
-  count                 = var.network_mode == "private" ? 2 : 0
+  count                 = var.network_mode == "private" ? 1 : 0
   name                  = "${var.name}-dns-link"
   resource_group_name   = var.resource_group_name
-  private_dns_zone_name = azurerm_private_dns_zone.redis[1].name
+  private_dns_zone_name = azurerm_private_dns_zone.redis[0].name
   virtual_network_id    = var.vnet_id
   tags                  = var.tags
 }
@@ -41,7 +41,7 @@ module "redis" {
   private_endpoints = var.network_mode == "private" ? {
     redis = {
       subnet_resource_id              = var.subnet_id 
-      private_dns_zone_resource_ids   = [azurerm_private_dns_zone.redis[1].id]
+      private_dns_zone_resource_ids   = [azurerm_private_dns_zone.redis[0].id]
       private_dns_zone_group_name     = "redis-private-dns-zone-group"
       private_service_connection_name = "redis-private-link"
       name                            = "${var.name}-pe"
@@ -61,4 +61,3 @@ module "redis" {
 
   tags = var.tags
 }
-

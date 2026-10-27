@@ -18,7 +18,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "redis" {
 # Redis Module
 module "redis" {
   source  = "Azure/avm-res-cache-redis/azurerm"
-  version = "0.4.0"
+  version = "0.5.0"
 
   name                = var.name
   resource_group_name = var.resource_group_name
